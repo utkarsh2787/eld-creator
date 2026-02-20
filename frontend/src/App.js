@@ -34,7 +34,7 @@ function App() {
     setResults(null);
 
     try {
-      const response = await axios.post('/api/plan-trip/', formData, {
+      const response = await axios.post('https://eld-creator.onrender.com/api/plan-trip/', formData, {
         timeout: 1000000, // 10 second timeout
       });
       setResults(response.data);
