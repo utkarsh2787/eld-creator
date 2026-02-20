@@ -1,6 +1,4 @@
-"""
-URL configuration for trip_planner app
-"""
+
 from django.urls import path
 from . import views
 

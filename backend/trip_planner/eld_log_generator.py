@@ -1,6 +1,4 @@
-"""
-ELD Log Generator - Creates visual daily log sheets (Dark Futuristic Theme)
-"""
+
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime, timedelta
 from typing import List, Dict
@@ -9,41 +7,41 @@ import base64
 
 
 class ELDLogGenerator:
-    """Generate ELD daily log sheets with graphical representation"""
+    
 
-    # Log sheet dimensions
+    
     WIDTH = 1400
     HEIGHT = 860
 
-    # ── Dark futuristic palette ──────────────────────────────
-    COLOR_BG        = '#020810'   # near-black deep space
-    COLOR_BG2       = '#071220'   # card surface
-    COLOR_GRID      = '#0c2a3a'   # subtle grid lines
-    COLOR_GRID_HOT  = '#0a3d52'   # hour marker lines
-    COLOR_TEXT      = '#c8e8f8'   # primary text
-    COLOR_MUTED     = '#2e6a86'   # secondary / labels
-    COLOR_ACCENT    = '#00d4ff'   # neon cyan
+    
+    COLOR_BG        = '#020810'   
+    COLOR_BG2       = '#071220'   
+    COLOR_GRID      = '#0c2a3a'   
+    COLOR_GRID_HOT  = '#0a3d52'   
+    COLOR_TEXT      = '#c8e8f8'   
+    COLOR_MUTED     = '#2e6a86'   
+    COLOR_ACCENT    = '#00d4ff'   
 
-    # Status bar colours
-    COLOR_OFFDUTY   = '#1a3a4a'   # dark steel
-    COLOR_SLEEPER   = '#0a2a60'   # deep navy
-    COLOR_DRIVING   = '#cc1a2e'   # red (neon tinted)
-    COLOR_ONDUTY    = '#b87000'   # amber
+    
+    COLOR_OFFDUTY   = '#1a3a4a'   
+    COLOR_SLEEPER   = '#0a2a60'   
+    COLOR_DRIVING   = '#cc1a2e'   
+    COLOR_ONDUTY    = '#b87000'   
 
-    # Glow/highlight tints layered on bars
+    
     GLOW_OFFDUTY    = '#2a5a70'
     GLOW_SLEEPER    = '#1040a0'
     GLOW_DRIVING    = '#ff2040'
     GLOW_ONDUTY     = '#ffaa00'
 
-    # Grid configuration
+    
     GRID_START_Y = 230
     GRID_HEIGHT  = 360
     GRID_START_X = 130
     GRID_WIDTH   = 1180
     HOURS_IN_DAY = 24
 
-    # Status types
+    
     STATUS_MAP = {
         'off_duty': {'label': 'OFF DUTY',            'color': COLOR_DRIVING,   'glow': GLOW_OFFDUTY,   'y_position': 0},
         'sleeper':  {'label': 'SLEEPER BERTH',       'color': COLOR_SLEEPER,   'glow': GLOW_SLEEPER,  'y_position': 1},
@@ -51,20 +49,20 @@ class ELDLogGenerator:
         'on_duty':  {'label': 'ON DUTY (Not Driving)','color': COLOR_ONDUTY,   'glow': GLOW_ONDUTY,   'y_position': 3},
     }
 
-    # Fix STATUS_MAP colors on class (can't use class-level refs inline)
+    
     STATUS_MAP['off_duty']['color'] = COLOR_OFFDUTY
     STATUS_MAP['sleeper']['color']  = COLOR_SLEEPER
 
     def __init__(self):
         self.font_title   = None
-        self.font_orb     = None   # "orbitron-like" — bold mono fallback
+        self.font_orb     = None   
         self.font_regular = None
         self.font_small   = None
         self.font_tiny    = None
 
-    # ── Font loading ────────────────────────────────────────
+    
     def _get_fonts(self):
-        """Load fonts — try DejaVu bold as closest available mono"""
+        
         deja_bold   = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
         deja_reg    = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
         deja_sans   = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
@@ -80,7 +78,7 @@ class ELDLogGenerator:
             self.font_title = self.font_orb = self.font_regular = \
                 self.font_small = self.font_tiny = default
 
-    # ── Helpers ─────────────────────────────────────────────
+    
     @staticmethod
     def _hex(h: str):
         h = h.lstrip('#')
@@ -90,14 +88,14 @@ class ELDLogGenerator:
                         x0, y0, x1, y1,
                         fill: str, glow: str,
                         radius: int = 3):
-        """Draw a filled rect with a 1-px bright inner edge (poor-man glow)."""
+        
         draw.rectangle([x0, y0, x1, y1], fill=fill)
-        # bright top edge
+        
         draw.line([(x0, y0), (x1, y0)], fill=glow, width=2)
-        # bright bottom edge
+        
         draw.line([(x0, y1), (x1, y1)], fill=glow, width=1)
 
-    # ── Public API ───────────────────────────────────────────
+    
     def generate_daily_log(
         self,
         day_number: int,
@@ -121,20 +119,20 @@ class ELDLogGenerator:
         buf.seek(0)
         return f"data:image/png;base64,{base64.b64encode(buf.read()).decode()}"
 
-    # ── Background decoration ────────────────────────────────
+    
     def _draw_background(self, draw: ImageDraw.Draw):
-        """Draw subtle dot-grid & corner accents."""
-        # horizontal scan lines (every 4 px, very faint)
+        
+        
         for y in range(0, self.HEIGHT, 4):
             draw.line([(0, y), (self.WIDTH, y)],
                       fill='#050e18', width=1)
 
-        # vertical grid dots
+        
         for x in range(0, self.WIDTH, 48):
             for y in range(0, self.HEIGHT, 48):
                 draw.rectangle([x-1, y-1, x+1, y+1], fill='#0a2030')
 
-        # top accent bar
+        
         for i in range(3):
             alpha = 80 - i * 25
             draw.rectangle(
@@ -142,11 +140,11 @@ class ELDLogGenerator:
                 fill='#00d4ff'
             )
 
-        # bottom accent bar
+        
         draw.rectangle([0, self.HEIGHT - 2, self.WIDTH, self.HEIGHT],
                        fill='#00d4ff')
 
-        # Corner L-marks
+        
         sz = 18
         c  = '#00d4ff'
         corners = [
@@ -159,18 +157,18 @@ class ELDLogGenerator:
             draw.rectangle([cx + sz - 2, cy, cx + sz, cy + sz], fill=c)
             draw.rectangle([cx, cy + sz - 2, cx + sz, cy + sz], fill=c)
 
-    # ── Header ───────────────────────────────────────────────
+    
     def _draw_header(self, draw: ImageDraw.Draw,
                      day_number: int, driver_name: str, date: str):
         if not date:
             date = datetime.now().strftime('%Y-%m-%d')
 
-        # Title
+        
         title = f"ELD DAILY LOG  //  DAY {day_number:02d}"
         draw.text((self.GRID_START_X, 24), title,
                   fill=self.COLOR_ACCENT, font=self.font_title)
 
-        # Sub info
+        
         draw.text((self.GRID_START_X, 62),
                   f"DRIVER: {driver_name.upper()}",
                   fill=self.COLOR_TEXT, font=self.font_orb)
@@ -178,19 +176,19 @@ class ELDLogGenerator:
                   f"DATE  : {date}",
                   fill=self.COLOR_MUTED, font=self.font_orb)
 
-        # Horizontal rule under header
+        
         draw.rectangle([self.GRID_START_X, 106,
                         self.GRID_START_X + self.GRID_WIDTH, 107],
                        fill='#0a3d52')
 
-        # Legend (right side)
+        
         lx = self.WIDTH - 310
         ly = 24
         draw.text((lx, ly - 2), "STATUS LEGEND",
                   fill=self.COLOR_ACCENT, font=self.font_orb)
         ly += 18
         for key, info in self.STATUS_MAP.items():
-            # colour swatch
+            
             draw.rectangle([lx, ly + 2, lx + 22, ly + 14],
                            fill=info['color'])
             draw.rectangle([lx, ly + 2, lx + 22, ly + 4],
@@ -199,13 +197,13 @@ class ELDLogGenerator:
                       fill=self.COLOR_TEXT, font=self.font_small)
             ly += 22
 
-    # ── Grid ─────────────────────────────────────────────────
+    
     def _draw_grid(self, draw: ImageDraw.Draw):
         px_per_hr = self.GRID_WIDTH / self.HOURS_IN_DAY
         row_h     = self.GRID_HEIGHT // 4
         labels    = ['OFF\nDUTY', 'SLEEPER\nBERTH', 'DRIVING', 'ON DUTY\nNOT DRV']
 
-        # Row backgrounds (alternating shades)
+        
         row_fills = ['#040e18', '#050f1c', '#04101e', '#04111f']
         for i in range(4):
             y0 = self.GRID_START_Y + i * row_h
@@ -215,7 +213,7 @@ class ELDLogGenerator:
                 fill=row_fills[i]
             )
 
-        # Horizontal separators
+        
         for i in range(5):
             y = self.GRID_START_Y + i * row_h
             col = self.COLOR_ACCENT if i == 0 or i == 4 else self.COLOR_GRID_HOT
@@ -225,7 +223,7 @@ class ELDLogGenerator:
                 fill=col, width=1
             )
 
-        # Vertical hour lines + labels
+        
         for i in range(self.HOURS_IN_DAY + 1):
             x   = self.GRID_START_X + int(i * px_per_hr)
             hot = (i % 6 == 0)
@@ -242,19 +240,19 @@ class ELDLogGenerator:
                           fill=self.COLOR_ACCENT if hot else self.COLOR_MUTED,
                           font=self.font_small)
 
-        # "HH" header above grid
+        
         draw.text((self.GRID_START_X - 4,
                    self.GRID_START_Y + self.GRID_HEIGHT + 8),
                   "HR", fill=self.COLOR_MUTED, font=self.font_tiny)
 
-        # Row labels (left side)
+        
         short = ['OFF', 'SB', 'D', 'ON']
         for i, lbl in enumerate(short):
             y = self.GRID_START_Y + i * row_h + row_h // 2 - 8
             draw.text((self.GRID_START_X - 55, y), lbl,
                       fill=self.COLOR_ACCENT, font=self.font_orb)
 
-        # Outer border
+        
         draw.rectangle(
             [self.GRID_START_X, self.GRID_START_Y,
              self.GRID_START_X + self.GRID_WIDTH,
@@ -262,7 +260,7 @@ class ELDLogGenerator:
             outline=self.COLOR_ACCENT, width=1
         )
 
-    # ── Status bars ──────────────────────────────────────────
+    
     def _draw_status_graph(self, draw: ImageDraw.Draw,
                            schedule_segments: List[Dict]):
         px_per_hr = self.GRID_WIDTH / self.HOURS_IN_DAY
@@ -274,7 +272,7 @@ class ELDLogGenerator:
             activity = seg.get('activity',   '')
             status   = seg.get('status',    'off_duty')
 
-            # Map to ELD row
+            
             if status == 'driving':
                 st = 'driving'
             elif activity in ['pickup', 'dropoff', 'fuel_stop']:
@@ -298,12 +296,12 @@ class ELDLogGenerator:
                                  x1, y0 + row_h - pad,
                                  info['color'], info['glow'])
 
-    # ── Summary strip ─────────────────────────────────────────
+    
     def _draw_summary(self, draw: ImageDraw.Draw,
                       schedule_segments: List[Dict]):
         sy = self.GRID_START_Y + self.GRID_HEIGHT + 52
 
-        # Totals
+        
         total_driving = total_on_duty = total_off_duty = 0
         for seg in schedule_segments:
             dur      = seg.get('duration', 0)
@@ -329,14 +327,14 @@ class ELDLogGenerator:
         x     = self.GRID_START_X
 
         for label, value, glow in items:
-            # card bg
+            
             draw.rectangle([x, sy, x + box_w, sy + 68],
                            fill='#040e18')
             draw.rectangle([x, sy, x + box_w, sy + 68],
                            outline='#0a3d52', width=1)
-            # left accent strip
+            
             draw.rectangle([x, sy, x + 3, sy + 68], fill=glow)
-            # top glow line
+            
             draw.rectangle([x, sy, x + box_w, sy + 1], fill=glow)
 
             draw.text((x + 12, sy + 10), label,
@@ -345,7 +343,7 @@ class ELDLogGenerator:
                       fill=self.COLOR_ACCENT, font=self.font_title)
             x += box_w + gap
 
-        # FMCSA reference
+        
         draw.text(
             (self.GRID_START_X + 3 * (box_w + gap) + 20, sy + 22),
             "FMCSA 70-HR / 8-DAY RULE",
@@ -357,7 +355,7 @@ class ELDLogGenerator:
             fill='#005566', font=self.font_tiny
         )
 
-    # ── Multi-day ────────────────────────────────────────────
+    
     def generate_multiple_logs(
         self,
         all_schedule_segments: List[Dict],

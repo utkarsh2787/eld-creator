@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker } from '
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// ── Inject dark popup styles once ────────────────────────
+
 const POPUP_STYLE = `
   .leaflet-popup-content-wrapper {
     background: rgba(4, 14, 28, 0.95) !important;
@@ -31,7 +31,7 @@ if (typeof document !== 'undefined' && !document.getElementById('eld-map-style')
   document.head.appendChild(style);
 }
 
-// ── Custom SVG marker factory ─────────────────────────────
+
 const svgMarker = (color, glow, symbol) => {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="44" viewBox="0 0 32 44">
@@ -66,7 +66,7 @@ const pickupIcon   = svgMarker('#006633', '#00ff99', 'PU');
 const dropoffIcon  = svgMarker('#880022', '#ff3060', 'DO');
 const restIcon     = svgMarker('#552200', '#ffaa00', 'REST');
 
-// ── Component ─────────────────────────────────────────────
+
 const RouteMap = ({ route }) => {
   if (!route || !route.coordinates) {
     return (
@@ -85,7 +85,7 @@ const RouteMap = ({ route }) => {
   const waypoints  = route.waypoints  || [];
   const restStops  = route.rest_stops || [];
 
-  // Bounds
+  
   const allPts = [current, pickup, dropoff, ...restStops.map(s => s.location)].filter(Boolean);
   const lats   = allPts.map(p => p[0]);
   const lngs   = allPts.map(p => p[1]);
@@ -107,24 +107,24 @@ const RouteMap = ({ route }) => {
     <MapContainer center={center} zoom={6}
       style={{ height: 500, width: '100%', borderRadius: 14, background: '#020810' }}>
 
-      {/* Dark CartoDB tile layer */}
+      {}
       <TileLayer
         attribution='&copy; <a href="https://carto.com/">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         maxZoom={19}
       />
 
-      {/* Route polyline — neon cyan */}
+      {}
       {waypoints.length > 0 && (
         <Polyline positions={waypoints} color="#00d4ff" weight={3} opacity={0.85} />
       )}
 
-      {/* Glow polyline underneath */}
+      {}
       {waypoints.length > 0 && (
         <Polyline positions={waypoints} color="#00aacc" weight={8} opacity={0.15} />
       )}
 
-      {/* Current location */}
+      {}
       <Marker position={current} icon={currentIcon}>
         <Popup>
           <PopupLabel title="Current Location"
@@ -132,7 +132,7 @@ const RouteMap = ({ route }) => {
         </Popup>
       </Marker>
 
-      {/* Pickup */}
+      {}
       <Marker position={pickup} icon={pickupIcon}>
         <Popup>
           <PopupLabel title="Pickup Location"
@@ -140,7 +140,7 @@ const RouteMap = ({ route }) => {
         </Popup>
       </Marker>
 
-      {/* Dropoff */}
+      {}
       <Marker position={dropoff} icon={dropoffIcon}>
         <Popup>
           <PopupLabel title="Dropoff Location"
@@ -148,10 +148,10 @@ const RouteMap = ({ route }) => {
         </Popup>
       </Marker>
 
-      {/* Rest stops */}
+      {}
       {restStops.map((stop, i) => (
         <React.Fragment key={i}>
-          {/* Glow ring */}
+          {}
           <CircleMarker center={stop.location} radius={14}
             pathOptions={{ color: '#ffaa00', weight: 1, opacity: 0.25, fillOpacity: 0 }} />
           <Marker position={stop.location} icon={restIcon}>

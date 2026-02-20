@@ -1,6 +1,4 @@
-"""
-API Views for Trip Planner
-"""
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,40 +10,29 @@ from .eld_log_generator import ELDLogGenerator
 
 @api_view(["POST"])
 def plan_trip(request):
-    """
-    Plan a trip with HOS compliance and generate ELD logs
-
-    Expected input:
-    {
-        "current_location": "Los Angeles, CA",
-        "pickup_location": "Phoenix, AZ",
-        "dropoff_location": "Dallas, TX",
-        "current_cycle_used": 15.5,
-        "driver_name": "John Doe"
-    }
-    """
+    
     try:
         print(request.data)
-        # Extract input data
+        
         current_location = request.data.get("current_location")
         pickup_location = request.data.get("pickup_location")
         dropoff_location = request.data.get("dropoff_location")
         current_cycle_used = float(request.data.get("current_cycle_used", 0))
         driver_name = request.data.get("driver_name", "Driver")
 
-        # Validate inputs
+        
         if not all([current_location, pickup_location, dropoff_location]):
             return Response(
                 {"error": "Missing required location fields"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Initialize services
+        
         route_service = RouteService()
         hos_calculator = HOSCalculator(current_cycle_used)
         eld_generator = ELDLogGenerator()
 
-        # Get route information
+        
         try:
             route_info = route_service.get_route_with_waypoints(
                 current_location, pickup_location, dropoff_location
@@ -57,8 +44,8 @@ def plan_trip(request):
         distance_pickup_to_dropoff = route_info["distance_pickup_to_dropoff"]
         total_distance = route_info["total_distance"]
 
-        # Calculate trip schedule with HOS compliance
-        # Flow: Current -> Drive -> Pickup Location -> Pickup -> Drive -> Dropoff Location -> Dropoff
+        
+        
         schedule = hos_calculator.calculate_trip_schedule(
             distance_to_pickup=distance_to_pickup,
             distance_pickup_to_dropoff=distance_pickup_to_dropoff,
@@ -67,12 +54,12 @@ def plan_trip(request):
             dropoff_time=1.0,
         )
 
-        # Add fuel stops (every 1000 miles)
+        
         schedule_with_fuel = hos_calculator.add_fuel_stops(
             schedule, fuel_interval=1000.0, fuel_time=0.5
         )
 
-        # Calculate rest stop locations
+        
         rest_distances = []
         cumulative_distance = 0
         for segment in schedule_with_fuel:
@@ -85,10 +72,10 @@ def plan_trip(request):
         )
         print(schedule_with_fuel)
 
-        # Generate ELD logs
+        
         eld_logs = eld_generator.generate_multiple_logs(schedule_with_fuel, driver_name)
 
-        # Calculate trip summary
+        
         total_driving_time = sum(
             s["duration"] for s in schedule_with_fuel if s["status"] == "driving"
         )
@@ -104,7 +91,7 @@ def plan_trip(request):
             1 for s in schedule_with_fuel if s["activity"] == "fuel_stop"
         )
 
-        # Prepare response
+        
         response_data = {
             "route": {
                 "total_distance": round(total_distance, 2),
@@ -144,5 +131,5 @@ def plan_trip(request):
 
 @api_view(["GET"])
 def health_check(request):
-    """Health check endpoint"""
+    
     return Response({"status": "ok"}, status=status.HTTP_200_OK)

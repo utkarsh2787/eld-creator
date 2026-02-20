@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// ── Famous cities (US-focused for trucking + major world cities) ──
+
 const CITIES = [
-  // USA — by state
+  
   'Atlanta, GA', 'Augusta, GA', 'Savannah, GA',
   'Birmingham, AL', 'Mobile, AL', 'Huntsville, AL',
   'Anchorage, AK', 'Fairbanks, AK',
@@ -59,36 +59,36 @@ const CITIES = [
   'Charleston, WV', 'Huntington, WV',
   'Milwaukee, WI', 'Madison, WI', 'Green Bay, WI',
   'Cheyenne, WY', 'Casper, WY',
-  // Canada
+  
   'Toronto, ON', 'Montreal, QC', 'Vancouver, BC', 'Calgary, AB',
   'Edmonton, AB', 'Ottawa, ON', 'Winnipeg, MB', 'Quebec City, QC',
-  // Mexico
+  
   'Mexico City, MX', 'Guadalajara, MX', 'Monterrey, MX', 'Tijuana, MX',
-  // Europe
+  
   'London, UK', 'Paris, France', 'Berlin, Germany', 'Madrid, Spain',
   'Rome, Italy', 'Amsterdam, Netherlands', 'Brussels, Belgium',
   'Vienna, Austria', 'Zurich, Switzerland', 'Stockholm, Sweden',
   'Oslo, Norway', 'Copenhagen, Denmark', 'Helsinki, Finland',
   'Lisbon, Portugal', 'Athens, Greece', 'Warsaw, Poland', 'Prague, Czech Republic',
   'Budapest, Hungary', 'Bucharest, Romania', 'Kiev, Ukraine',
-  // Asia
+  
   'Tokyo, Japan', 'Beijing, China', 'Shanghai, China', 'Hong Kong, China',
   'Seoul, South Korea', 'Mumbai, India', 'Delhi, India', 'Bangalore, India',
   'Singapore', 'Bangkok, Thailand', 'Kuala Lumpur, Malaysia',
   'Jakarta, Indonesia', 'Manila, Philippines', 'Dubai, UAE', 'Riyadh, Saudi Arabia',
   'Istanbul, Turkey', 'Karachi, Pakistan', 'Dhaka, Bangladesh',
-  // Australia
+  
   'Sydney, Australia', 'Melbourne, Australia', 'Brisbane, Australia',
   'Perth, Australia', 'Adelaide, Australia',
-  // South America
+  
   'São Paulo, Brazil', 'Rio de Janeiro, Brazil', 'Buenos Aires, Argentina',
   'Bogotá, Colombia', 'Lima, Peru', 'Santiago, Chile', 'Caracas, Venezuela',
-  // Africa
+  
   'Cairo, Egypt', 'Lagos, Nigeria', 'Nairobi, Kenya', 'Johannesburg, South Africa',
   'Cape Town, South Africa', 'Casablanca, Morocco', 'Accra, Ghana',
 ].sort();
 
-// ── Component ─────────────────────────────────────────────
+
 export default function CityAutocomplete({ id, name, value, onChange, placeholder }) {
   const [open,     setOpen]     = useState(false);
   const [query,    setQuery]    = useState(value || '');
@@ -109,7 +109,7 @@ export default function CityAutocomplete({ id, name, value, onChange, placeholde
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // Scroll active item into view
+  
   useEffect(() => {
     if (active >= 0 && listRef.current) {
       const item = listRef.current.children[active];
@@ -160,7 +160,7 @@ export default function CityAutocomplete({ id, name, value, onChange, placeholde
           autoComplete="off"
           required
         />
-        {/* Dropdown chevron */}
+        {}
         <span style={{
           position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
           color: open ? '#00d4ff' : '#1e4a64',
@@ -204,7 +204,7 @@ export default function CityAutocomplete({ id, name, value, onChange, placeholde
                 color: i === active ? '#00d4ff' : '#1e4a64',
                 fontSize: 10, flexShrink: 0,
               }}>◈</span>
-              {/* Highlight matching part */}
+              {}
               {highlightMatch(city, query)}
             </li>
           ))}

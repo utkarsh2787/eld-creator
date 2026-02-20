@@ -1,6 +1,4 @@
-"""
-WSGI config for eld_backend project.
-"""
+
 
 import os
 

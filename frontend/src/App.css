@@ -1,7 +1,5 @@
-/* ─── Google Font ─────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ─── Root tokens ─────────────────────────────────────── */
 :root {
   --bg: #020408;
   --bg2: #050c14;
@@ -18,7 +16,6 @@
   --dim: #1e3a4a;
 }
 
-/* ─── Reset ───────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -32,8 +29,7 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  /* animated scanline overlay */
-  background-image:
+    background-image:
     repeating-linear-gradient(0deg,
       transparent,
       transparent 2px,
@@ -41,7 +37,6 @@ body {
       rgba(0, 212, 255, 0.015) 4px);
 }
 
-/* ─── App shell ───────────────────────────────────────── */
 .App {
   min-height: 100vh;
   padding: 28px 20px 80px;
@@ -54,7 +49,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Grid overlay */
 .App::before {
   content: '';
   position: fixed;
@@ -111,7 +105,6 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* ─── Glass card (shared) ─────────────────────────────── */
 .input-section,
 .results-section {
   background: var(--surface);
@@ -180,8 +173,7 @@ body {
   font-family: 'Inter', sans-serif;
   transition: border-color 0.25s, box-shadow 0.25s;
   outline: none;
-  /* Force dark on number spinners */
-  color-scheme: dark;
+    color-scheme: dark;
 }
 
 .input-group input::placeholder {
@@ -196,7 +188,6 @@ body {
     0 0 20px rgba(0, 212, 255, 0.08);
 }
 
-/* ── Kill browser autofill light background ── */
 .input-group input:-webkit-autofill,
 .input-group input:-webkit-autofill:hover,
 .input-group input:-webkit-autofill:focus,
@@ -209,7 +200,6 @@ body {
   transition: background-color 9999s ease;
 }
 
-/* ─── Plan button ────────────────────────────────────── */
 .plan-button {
   position: relative;
   display: block;
@@ -326,7 +316,6 @@ body {
   font-size: 1.3rem;
 }
 
-/* ─── Summary cards ──────────────────────────────────── */
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
@@ -370,7 +359,6 @@ body {
   text-transform: uppercase;
 }
 
-/* ─── Map ────────────────────────────────────────────── */
 .map-container {
   height: 500px;
   border-radius: 14px;
@@ -380,7 +368,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* ─── Schedule table ─────────────────────────────────── */
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
@@ -415,7 +402,6 @@ body {
   background: rgba(0, 212, 255, 0.04);
 }
 
-/* ─── Activity badges ────────────────────────────────── */
 .activity-badge {
   display: inline-block;
   padding: 4px 12px;
@@ -450,7 +436,6 @@ body {
   border: 1px solid rgba(0, 212, 255, 0.25);
 }
 
-/* ─── ELD logs ────────────────────────────────────────── */
 .eld-logs-section {
   display: flex;
   flex-direction: column;
@@ -477,7 +462,6 @@ body {
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-/* ─── Scrollbar ──────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   background: var(--bg2);
@@ -492,7 +476,6 @@ body {
   background: var(--accent);
 }
 
-/* ─── Responsive ─────────────────────────────────────── */
 @media (max-width: 640px) {
 
   .input-section,
