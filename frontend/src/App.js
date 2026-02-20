@@ -35,7 +35,7 @@ function App() {
 
     try {
       const response = await axios.post('/api/plan-trip/', formData, {
-        timeout: 10000, // 10 second timeout
+        timeout: 1000000, // 10 second timeout
       });
       setResults(response.data);
     } catch (err) {
