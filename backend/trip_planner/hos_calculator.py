@@ -73,6 +73,15 @@ class HOSCalculator:
                         'end_time': time_of_day + self.REQUIRED_OFF_DUTY_HOURS,
                         'day': current_day,
                         'distance_covered': 0,
+                        'status': 'sleeper'
+                    })
+                    schedule.append({
+                        'activity': 'required_break',
+                        'duration': 24-time_of_day - self.REQUIRED_OFF_DUTY_HOURS,
+                        'start_time': time_of_day + self.REQUIRED_OFF_DUTY_HOURS,
+                        'end_time': 24,
+                        'day': current_day,
+                        'distance_covered': 0,
                         'status': 'off_duty'
                     })
                     current_time += self.REQUIRED_OFF_DUTY_HOURS
@@ -156,6 +165,15 @@ class HOSCalculator:
                         'end_time': time_of_day + self.REQUIRED_OFF_DUTY_HOURS,
                         'day': current_day,
                         'distance_covered': 0,
+                        'status': 'sleeper'
+                    })
+                    schedule.append({
+                        'activity': 'required_break',
+                        'duration': 24-time_of_day - self.REQUIRED_OFF_DUTY_HOURS,
+                        'start_time': time_of_day + self.REQUIRED_OFF_DUTY_HOURS,
+                        'end_time': 24,
+                        'day': current_day,
+                        'distance_covered': 0,
                         'status': 'off_duty'
                     })
                     current_time += self.REQUIRED_OFF_DUTY_HOURS
@@ -231,8 +249,11 @@ class HOSCalculator:
         for segment in route_segments:
             
             shifted_segment = segment.copy()
-            shifted_segment['start_time'] += time_shift
+            if( shifted_segment['start_time'] !=0):
+              shifted_segment['start_time'] += time_shift
             shifted_segment['end_time'] += time_shift
+            shifted_segment['end_time'] = min(shifted_segment['end_time'], 24)
+
 
             updated_segments.append(shifted_segment)
 
